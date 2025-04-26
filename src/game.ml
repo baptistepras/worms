@@ -617,6 +617,7 @@ let run js =
                 let ca = createCase2 "0" j i images in
                 map#setLayout i j ca;
                
+               
                 registerComponent (ca );
 
                 end;

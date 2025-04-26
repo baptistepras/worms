@@ -59,12 +59,12 @@ let handle_input () =
      
     | KeyUp s -> unset_key s
     | Quit -> exit 0
-    | MouseButton(_, b, x, y) -> (
+    (* MouseButton(_, b, x, y) -> (
         let i = (x - Cst.offsetX) / Cst.tileWidth in 
         let j = (y - Cst.offsetY) / Cst.tileHeight in 
         match map#deletePlatform j i with
           Some e -> e#disappear
-         |  None -> ())
+         |  None -> ()) *)
     | _ -> ()
   in
   Hashtbl.iter (fun key action ->
