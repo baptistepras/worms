@@ -6,7 +6,8 @@
 (alias
    (name js)
    (deps prog/game_js.bc.js (glob_files resources/files/*))
-)
+   
+   )
 
 
 (alias

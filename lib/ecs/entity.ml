@@ -3,6 +3,11 @@ class t ?name () =
                            | None -> "__NO_NAME__" in
   object
     method name = name
+    val mutable isRotating = false
+
+    method setRotating b = isRotating <- b
+
+    method rotates = isRotating
   end
 let pp fmt (e:#t) =
   Format.fprintf fmt "<%s:%d>" e#name (Oo.id e)

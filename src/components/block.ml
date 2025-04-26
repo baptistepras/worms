@@ -4,7 +4,7 @@ open System_defs
 
 
 let create (x, y, v, txt, width, height, mass) =
-  let e = new block () in
+  let e = new block (true) in
   e#texture#set txt;
   e#position#set Vector.{x=float x;y = float y};
   e#velocity#set v;

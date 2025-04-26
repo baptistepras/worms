@@ -31,7 +31,7 @@ class box () =
   end
 
 class texture () =
-  let r = Component.init (Texture.Color (Gfx.color 0 0 0 255)) in
+  let r = Component.init (Texture.Color (Gfx.color 255 0 0 255)) in
   object
     method texture = r
   end
@@ -101,8 +101,8 @@ class type drawable =
 
 (** Real objects *)
 
-class block () =
-  object
+class block ( imo : bool) =
+  object (self)
     inherit Entity.t ()
     inherit position ()
     inherit box ()
@@ -112,4 +112,42 @@ class block () =
     inherit mass ()
     inherit forces ()
     inherit velocity ()
+
+    val immobile = imo 
+
+    val mutable touched = false
+
+    val mutable present = true
+
+    method disappear = present <- false
+
+
+    method isPresent = present
+
+    val mutable isRotating = false
+
+    method setRotating b = isRotating <- b
+
+    method rotates = isRotating
+    method isImmobile = immobile
+
+    method setTouched = touched <- true
+    method isTouched = touched
+
+    method getVx = (self#velocity#get).x 
+    method getVy = (self#velocity#get).y 
+
+    method getPx = (self#position#get).x 
+    method getPy = (self#position#get).y 
+
+    method setPx d = let y1 = self#getPy in 
+      self#position#set Vector.{x = d; y = y1}
+
+    method setVx d = self#velocity#set (Vector.changeX (self#velocity#get) d) 
+    method setVy d = self#velocity#set (Vector.changeY (self#velocity#get) d) 
+
+
+    method augmenteVx d = self#setVx (self#getVx +. d)
+    method augmenteVy d = self#setVy (self#getVy +. d)
+
   end

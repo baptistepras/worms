@@ -1,6 +1,8 @@
 class t : ?name:string -> unit ->
   object
     method name : string
+    method setRotating : bool -> unit
+    method rotates : bool
   end
 (** An entity is just an OCaml object which contains at least
     an internal id and a name. The internal id is already
