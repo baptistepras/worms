@@ -91,6 +91,52 @@ Voici comment nous avons organisé les dossier `src` et `ressources `
 Les cartes du jeu sont des `.csv`, que l'on a créées en utilisant le logiciel `Tiled`. Le dossier `maps` en contient plusieurs, mais on n'en utilise qu'une seule dans le jeu.
 
 
+## Implémentation globale
 
+Comme dit précédemment, le fichier `game.ml ` contient la boucle du jeu et tous les objets. Voici les classes créées  dans le fichier `classe.ml`: 
 
+- `case` : plateforme du jeu dépendant de la classe `block`
+- `map` : la carte du jeu qui contient un array2d de case, la largeur et la hauteur de la carte
+- `vers`: la classe du joueur qui dépend de la classe `block`, qui contient le code des vers
+- ` arme ` : les armes du jeu, contenant le nombre de munitions, les dégats, son sprite
+- `projectile` : dépend de block, contient le code des projectiles du joueur
 
+Toutes les entités sont gérés par le `Collision_System`, `Moving System` et `Draw_system`.
+
+Le fichier global contient une structure qui est accessible à peu près partout, sauf dans certains fichiers comme `classe.ml` (nous avons rencontré des problèmes de cycles.). La voici :
+
+``` ocaml
+
+type t = {
+  window : Gfx.window;  (*la fenetre du jeu*)
+  ctx : Gfx.context;    (*le contexte de la fenetre*)
+  images: (string, Gfx.surface) Hashtbl.t; (* tous les sprites du jeu*)
+  map : Classes.map; (* La carte du jeu*)
+  vers : Classes.vers list; (* La liste des joueurs*)
+  phaseJeu : phase;   (*La phase du jeu*)
+  javascript : bool;  (* Si le jeu est lance depuis javascript, on s en sert car il y a des légères différences*)
+  font1 : Gfx.font;  (*la police 1 de jeu *)
+  font2 : Gfx.font;(*la police 2 de jeu*)
+  equipes : Gfx.surface list array; (*Un affichage des equipes *)
+  lastDt : float;   (*Le temps écoule depuis le début du jeu*)
+  bullet : Classes.projectile option ref (*Une référence vers le projectile actuel du jeu*)
+}
+
+```
+
+On a également implémente un type énuméré phase pour comprendre la phase actuelle du jeu : 
+
+```ocaml
+type phase = 
+    Moving of int (*Si un joueur bouge*)
+  | Aiming of int (*Si un joueur vise*)
+  | Shooting of int (*Si un projectile bouge*)
+```
+
+Enfin on a implémenté un type énuméré pour comprendre l'état actuel du jeu en terme de gagnant ou perdant :
+```ocaml
+type resultJeu =
+| Victoire of int (*Si une equipe gagne*)
+| Egalite   (*Si tout le monde est mort, égalité*)
+| Continue  (*Si personne n'a gagné et que le jeu continue*)
+```
