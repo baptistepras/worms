@@ -1,0 +1,6 @@
+.DS_Store
+_build/
+*.install
+*.exe
+prog/*.bc.js
+.vscode/
